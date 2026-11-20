@@ -1,0 +1,16 @@
+{
+  "source": "Ruszczak et al., \"The OPS-SAT benchmark for detecting anomalies in satellite telemetry\", Scientific Data 12, 710 (2025), Table 3 (universal detector, test split). CC BY 4.0. https://www.nature.com/articles/s41597-025-05035-3/tables/3",
+  "read_on": "2026-11-20",
+  "columns": ["auc_pr", "auc_roc", "accuracy", "f1", "precision", "recall", "mcc"],
+  "detectors": {
+    "FCNN":     [0.979, 0.989, 0.977, 0.946, 0.963, 0.929, 0.932],
+    "LSVC":     [0.934, 0.968, 0.926, 0.808, 0.911, 0.726, 0.771],
+    "LR":       [0.931, 0.969, 0.924, 0.800, 0.920, 0.708, 0.764],
+    "AdaBoost": [0.923, 0.962, 0.934, 0.836, 0.890, 0.788, 0.797],
+    "OCSVM":    [0.659, 0.787, 0.845, 0.647, 0.630, 0.664, 0.548],
+    "KNN":      [0.658, 0.852, 0.824, 0.575, 0.594, 0.558, 0.465],
+    "GMM":      [0.426, 0.713, 0.737, 0.393, 0.388, 0.398, 0.225],
+    "PCA":      [0.373, 0.612, 0.728, 0.357, 0.360, 0.354, 0.185],
+    "IForest":  [0.347, 0.635, 0.701, 0.295, 0.297, 0.292, 0.105]
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "notice": "Do not open before answering. The label comes from OPSSAT-AD (ESA and KP Labs engineers); the reason is our own reading of the plot, the dataset publishes no causes.",
+  "attribution": "Data excerpted from OPSSAT-AD (Ruszczak, Kotowski, Evans and Nalepa, Scientific Data 12, 710, 2025; https://doi.org/10.5281/zenodo.15108715), CC BY 4.0 / MIT, (c) 2024 KP Labs. Timestamps were converted to seconds from segment start.",
+  "answers": [
+    {
+      "case": "case-01",
+      "label": "nominal",
+      "why": "The usual smooth magnetometer arc; the small spikes are noise of at most 0.7e-5 (ten times smaller than the jumps in this channel's anomalies), there are no stretches stuck at zero and everything stays within the nominal range.",
+      "opssat_segment": 77,
+      "channel": "CADC0872"
+    },
+    {
+      "case": "case-02",
+      "label": "anomaly",
+      "why": "Between t=185 and t=195 s two consecutive samples shoot to -5.2e-5 and +6.3e-5 (a 1.15e-4 jump, about 75 times the typical step) and the signal returns to the arc: a slowly varying magnetic field does not do that, and +6.3e-5 exceeds the maximum of every nominal segment in the channel (5.0e-5).",
+      "opssat_segment": 2073,
+      "channel": "CADC0872"
+    },
+    {
+      "case": "case-03",
+      "label": "nominal",
+      "why": "A clean photodiode bell up to 1.05 rad; the falling tail is slow and straight but has no jumps or steps, and it ends at zero, the channel's usual resting value.",
+      "opssat_segment": 1654,
+      "channel": "CADC0888"
+    },
+    {
+      "case": "case-04",
+      "label": "anomaly",
+      "why": "It leaves zero abruptly (0 to 0.06 rad in two samples), sits on a noisy plateau near 0.1 rad and drops in a step at t=114-115 s, never forming the smooth bell; its maximum (0.12) is far below what is normal for the channel (95% of nominal segments exceed 0.44).",
+      "opssat_segment": 972,
+      "channel": "CADC0892"
+    },
+    {
+      "case": "case-05",
+      "label": "anomaly",
+      "why": "The first 21 s are stuck at exactly 0 and the next sample jumps to -3.2e-5 to follow the normal arc: a frozen or lost reading at the start, since the real magnetometer never reads a sustained exact zero.",
+      "opssat_segment": 570,
+      "channel": "CADC0873"
+    },
+    {
+      "case": "case-06",
+      "label": "nominal",
+      "why": "A textbook smooth magnetometer arc between -3.5e-5 and +3.0e-5, with no zeros or jumps (the largest step between samples is 0.2e-5).",
+      "opssat_segment": 177,
+      "channel": "CADC0872"
+    },
+    {
+      "case": "case-07",
+      "label": "nominal",
+      "why": "A shoulder, a smooth peak up to 0.60 rad (right at the channel median) and a fast but continuous fall to zero; the zeros at the start and the end are the photodiode's normal resting value, not lost readings.",
+      "opssat_segment": 1731,
+      "channel": "CADC0894"
+    },
+    {
+      "case": "case-08",
+      "label": "anomaly",
+      "why": "In the middle of the arc there are two stretches stuck at exactly 0 (t=44-94 s and t=127-142 s) and, coming back from the second, a single-sample spike to 6.3e-5, above the maximum of every nominal segment in the channel (5.0e-5).",
+      "opssat_segment": 4,
+      "channel": "CADC0872"
+    },
+    {
+      "case": "case-09",
+      "label": "anomaly",
+      "why": "Right at the peak (0.52 rad) a single sample drops to 0.33 at t=65 s and the next one is back at 0.52: a one-point notch in a curve that should be smooth.",
+      "opssat_segment": 1582,
+      "channel": "CADC0888"
+    },
+    {
+      "case": "case-10",
+      "label": "nominal",
+      "why": "A smooth magnetometer arc with only 21 samples because this stretch arrives every 5 s; having few samples is not an anomaly and there are no jumps or zeros.",
+      "opssat_segment": 1376,
+      "channel": "CADC0873"
+    },
+    {
+      "case": "case-11",
+      "label": "anomaly",
+      "why": "Before the peak there is a stray 13 s pulse (t=175-187 s) that returns to exactly zero for 22 s, and the main peak starts abruptly and is jagged, with sharp drops; the low amplitude (0.12 rad) is not the reason, because this channel has nominal segments just as low.",
+      "opssat_segment": 1737,
+      "channel": "CADC0894"
+    },
+    {
+      "case": "case-12",
+      "label": "nominal",
+      "why": "Hard on purpose: it is noisy, only reaches 0.40 rad and has a small spike at t=120 s, but it follows a single bell with no zero stretches inside the peak and no large back-and-forth jumps, and the annotators labelled it nominal; noisy is not the same as anomalous.",
+      "opssat_segment": 904,
+      "channel": "CADC0892"
+    }
+  ]
+}

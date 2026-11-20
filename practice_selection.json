@@ -1,0 +1,18 @@
+{
+  "note": "Hand-picked selection of 12 segments from the TRAINING split (the test split stays untouched for scoring the review layer). List order is case order. The label is not written here: build_practice.py reads it from the dataset. The \"why\" is our own reading of the plot, checked against the samples; OPSSAT-AD does not publish a cause per anomaly.",
+  "cases": [
+    {"segment": 77,   "why": "The usual smooth magnetometer arc; the small spikes are noise of at most 0.7e-5 (ten times smaller than the jumps in this channel's anomalies), there are no stretches stuck at zero and everything stays within the nominal range."},
+    {"segment": 2073, "why": "Between t=185 and t=195 s two consecutive samples shoot to -5.2e-5 and +6.3e-5 (a 1.15e-4 jump, about 75 times the typical step) and the signal returns to the arc: a slowly varying magnetic field does not do that, and +6.3e-5 exceeds the maximum of every nominal segment in the channel (5.0e-5)."},
+    {"segment": 1654, "why": "A clean photodiode bell up to 1.05 rad; the falling tail is slow and straight but has no jumps or steps, and it ends at zero, the channel's usual resting value."},
+    {"segment": 972,  "why": "It leaves zero abruptly (0 to 0.06 rad in two samples), sits on a noisy plateau near 0.1 rad and drops in a step at t=114-115 s, never forming the smooth bell; its maximum (0.12) is far below what is normal for the channel (95% of nominal segments exceed 0.44)."},
+    {"segment": 570,  "why": "The first 21 s are stuck at exactly 0 and the next sample jumps to -3.2e-5 to follow the normal arc: a frozen or lost reading at the start, since the real magnetometer never reads a sustained exact zero."},
+    {"segment": 177,  "why": "A textbook smooth magnetometer arc between -3.5e-5 and +3.0e-5, with no zeros or jumps (the largest step between samples is 0.2e-5)."},
+    {"segment": 1731, "why": "A shoulder, a smooth peak up to 0.60 rad (right at the channel median) and a fast but continuous fall to zero; the zeros at the start and the end are the photodiode's normal resting value, not lost readings."},
+    {"segment": 4,    "why": "In the middle of the arc there are two stretches stuck at exactly 0 (t=44-94 s and t=127-142 s) and, coming back from the second, a single-sample spike to 6.3e-5, above the maximum of every nominal segment in the channel (5.0e-5)."},
+    {"segment": 1582, "why": "Right at the peak (0.52 rad) a single sample drops to 0.33 at t=65 s and the next one is back at 0.52: a one-point notch in a curve that should be smooth."},
+    {"segment": 1376, "why": "A smooth magnetometer arc with only 21 samples because this stretch arrives every 5 s; having few samples is not an anomaly and there are no jumps or zeros."},
+    {"segment": 1737, "why": "Before the peak there is a stray 13 s pulse (t=175-187 s) that returns to exactly zero for 22 s, and the main peak starts abruptly and is jagged, with sharp drops; the low amplitude (0.12 rad) is not the reason, because this channel has nominal segments just as low."},
+    {"segment": 904,  "why": "Hard on purpose: it is noisy, only reaches 0.40 rad and has a small spike at t=120 s, but it follows a single bell with no zero stretches inside the peak and no large back-and-forth jumps, and the annotators labelled it nominal; noisy is not the same as anomalous."}
+  ],
+  "nominal_reference": [44, 1864, 661, 1283, 1534, 1656, 990, 940, 1100, 1148]
+}
