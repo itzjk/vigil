@@ -1,5 +1,5 @@
 #!/bin/sh
-# Runs everything from scratch: environment, data, tests, baseline and practice pack.
+# Runs everything from scratch: environment, data, tests, baseline, practice pack and review dry run.
 set -eu
 cd "$(dirname "$0")"
 
@@ -18,9 +18,11 @@ fi
 
 echo "== 1. Data =="
 .venv/bin/python download.py
-echo "== 2. Scorer tests =="
+echo "== 2. Tests =="
 .venv/bin/python -m pytest -q tests
 echo "== 3. Baseline =="
 .venv/bin/python baseline.py
 echo "== 4. Practice pack =="
 .venv/bin/python build_practice.py
+echo "== 5. Review circuit dry run (fixed-rule test double, not a result) =="
+.venv/bin/python -m review --pilot

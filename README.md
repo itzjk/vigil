@@ -2,7 +2,8 @@
 
 A reproduced baseline for anomaly detection in real satellite telemetry (ESA's OPS-SAT, the public
 OPSSAT-AD benchmark), with a single scorer and a small practice pack. It is the ground floor for a review
-layer that checks every alarm a detector raises before a person sees it; that layer is not built yet.
+layer that checks every alarm a detector raises before a person sees it. The scaffold of that layer is here
+and tested; the reviewers that would make it useful are not, so there is no review result yet.
 
 Made by ZERACK.
 
@@ -45,8 +46,8 @@ counts are in [`results/baseline.md`](results/baseline.md).
 
 The detectors that need no labels are the ones an operator can actually deploy on a new satellite, and
 they are noisy: of the three reproduced here, between 4 and 7 out of every 10 alarms are false (70% for
-Isolation Forest, 64% for PCA, 40% for KNN), while they still miss between 45% and 70% of the real anomalies. An
-operator who gets seven false alarms out of ten stops trusting the alarm.
+Isolation Forest, 64% for PCA, 40% for KNN), while they still miss between 45% and 70% of the real
+anomalies. An operator who gets seven false alarms out of ten stops trusting the alarm.
 
 That gap is where a review layer comes in: agents that take each alarm, look at the signal, explain what
 they see, propose what to do, and hand it to a person who signs off. Nothing here shows that such a layer
@@ -60,8 +61,8 @@ honestly: fewer false positives, no extra missed anomalies, same test split, sam
 ```
 
 One command: it creates a virtual environment, downloads OPSSAT-AD from Zenodo with checksum verification
-(about 20 MB), runs the scorer tests, reproduces the baseline and rebuilds the practice pack. It takes
-about a minute and around 220 MB of memory on a laptop. It needs Python 3.9 to 3.12 (choose one with
+(about 20 MB), runs the tests, reproduces the baseline, rebuilds the practice pack and does a dry run of the review
+circuit. It takes about a minute and a half and under 300 MB of memory on a laptop. It needs Python 3.9 to 3.12 (choose one with
 `PYTHON=/path/to/python ./run.sh`); the pinned versions are the ones the dataset itself pins.
 
 To score any new set of predictions against the test split:
@@ -69,6 +70,51 @@ To score any new set of predictions against the test split:
 ```sh
 .venv/bin/python measure.py my_predictions.csv   # columns: segment, prediction (0/1), optional score
 ```
+
+## Review layer (scaffold)
+
+The circuit that will review alarms is built and tested end to end. What it does not have yet is a real
+reviewer, so **it has produced no result**.
+
+What is there, under `review/`:
+
+- **Blind packets** (`packet.py`). For every alarm an unsupervised detector raises on the test split (162
+  distinct segments across IForest, KNN and PCA) it writes a folder with the plot, the samples, a numeric
+  summary (channel, sensor, samples, duration, minimum, maximum, jumps, gaps) and a reference sheet of
+  nominal segments from the same channel, taken only from the training split. A packet never carries the
+  label, the dataset's segment number or absolute timestamps; a guard refuses to write one that does, and
+  a test fails if any of them slips in. The packet-to-segment key lives outside the packets.
+- **Pluggable reviewers** (`reviewer.py`). A reviewer takes a packet and returns validated JSON: `verdict`
+  (`anomaly`, `nominal` or `unsure`), `confidence` between 0 and 1, `reason` (one sentence citing something
+  visible: where and how much) and `next_check`. Two exist: a fixed rule, and an external command set with
+  `ALARM_GUARD_REVIEWER_CMD`, which receives the packet folder as its last argument and prints the JSON.
+  That socket is where our own agent system plugs in. Malformed output is rejected and recorded as
+  `unsure`; it is never repaired or guessed.
+- **A two-review panel** (`panel.py`). Each alarm gets two independent reviews; each reviewer works on its
+  own copy of the packet and cannot see the other's answer. The rule: **dismissed** only if both say
+  nominal with confidence of at least 0.8; **confirmed** if both say anomaly; anything else (disagreement,
+  any `unsure`, a rejected review) is **escalated** to a person.
+- **An append-only ledger** (`ledger.py`). Every packet, review and decision goes to a JSONL file with a
+  UTC time, the reviewer's version and a hash chain, so a rewritten line is detected. It is the evidence
+  that would later justify letting a kind of case go automatic.
+- **A scorer** (`score.py`), the only place the labels enter. Per detector: alarms before and after, false
+  alarms removed, real anomalies lost to a wrong dismissal, alarms escalated to a person, and precision /
+  recall / F1 before and after, computed with `measure.py`.
+
+```sh
+./review.sh --pilot                 # dry run on the 12 practice cases with the fixed rule
+./review.sh --test --packets-only   # build the 162 test packets, review nothing
+```
+
+**The fixed-rule reviewer is a test double.** It compares the largest jump in the segment with the
+channel's nominal jumps and exists only to exercise the circuit. Its output in
+[`results/review-pilot.md`](results/review-pilot.md) is **not a result**: it runs on the 12 hand-picked
+practice cases, and it wrongly dismisses 2 of the 6 real anomalies there, which is exactly the kind of
+loss the scorer is meant to expose. The program refuses to run it on the test split.
+
+What is not there: any real reviewer, any review of the test-split alarms, and therefore any claim that
+review reduces false alarms. One known limit of the blinding: the samples are real, so a reviewer holding
+a copy of the dataset could match them and recover the label; reviewers must run without the dataset.
 
 ## What is in the repository
 
@@ -82,12 +128,14 @@ To score any new set of predictions against the test split:
 | `published.json` | The figures of the paper's Table 3, with their source |
 | `results/` | `baseline.md`, `baseline.json` and each detector's predictions |
 | `practice/` | 12 real segments to judge "anomaly or not", answers kept apart |
+| `review/`, `review.sh` | The review layer scaffold: packets, reviewers, panel, ledger, scorer |
+| `results/review-pilot.md` | Output of the dry run with the test double (not a result) |
 | `SOURCES.md` | Licences and citations for OPSSAT-AD and ESA-ADB |
 
 ## What is NOT done yet
 
-- **The review layer.** It is the next step and does not exist. Its starting point is the alarms in
-  `results/predictions/`.
+- **A real reviewer and a real review run.** Only the scaffold of the review layer exists. No reviewer
+  other than the fixed-rule test double has been run, and nothing has been reviewed on the test split.
 - **The paper's neural network** (FCNN, the best published model, F1 0.946) was not reproduced; this step
   deliberately avoids deep-learning dependencies. Of the 30 algorithms in the paper, 6 are reproduced.
 - **ESA-ADB**, the larger ESA benchmark (11.6 GB compressed), is documented in `SOURCES.md` but not

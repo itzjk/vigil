@@ -1,0 +1,62 @@
+[
+  {
+    "case": "case-01",
+    "channel": "CADC0872",
+    "sampling_s": 1
+  },
+  {
+    "case": "case-02",
+    "channel": "CADC0872",
+    "sampling_s": 5
+  },
+  {
+    "case": "case-03",
+    "channel": "CADC0888",
+    "sampling_s": 5
+  },
+  {
+    "case": "case-04",
+    "channel": "CADC0892",
+    "sampling_s": 1
+  },
+  {
+    "case": "case-05",
+    "channel": "CADC0873",
+    "sampling_s": 1
+  },
+  {
+    "case": "case-06",
+    "channel": "CADC0872",
+    "sampling_s": 1
+  },
+  {
+    "case": "case-07",
+    "channel": "CADC0894",
+    "sampling_s": 1
+  },
+  {
+    "case": "case-08",
+    "channel": "CADC0872",
+    "sampling_s": 1
+  },
+  {
+    "case": "case-09",
+    "channel": "CADC0888",
+    "sampling_s": 5
+  },
+  {
+    "case": "case-10",
+    "channel": "CADC0873",
+    "sampling_s": 5
+  },
+  {
+    "case": "case-11",
+    "channel": "CADC0894",
+    "sampling_s": 1
+  },
+  {
+    "case": "case-12",
+    "channel": "CADC0892",
+    "sampling_s": 1
+  }
+]

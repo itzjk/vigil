@@ -3,3 +3,5 @@ __pycache__/
 .pytest_cache/
 # Raw data is fetched by download.py (19 MB, md5-checked) and is not committed.
 data/
+# Review runs (packets, private key, ledger) are local working state.
+runs/

@@ -23,6 +23,15 @@ FEATURES = [
     "diff_peaks", "diff2_peaks", "diff_var", "diff2_var", "kurtosis", "skew",
 ]
 
+# Names from the paper's channel list ("Data Records" section).
+SENSORS = {
+    "CADC0872": "magnetometer, axis 0", "CADC0873": "magnetometer, axis 1",
+    "CADC0874": "magnetometer, axis 2", "CADC0884": "photodiode 1, theta angle",
+    "CADC0886": "photodiode 2, theta angle", "CADC0888": "photodiode 3, theta angle",
+    "CADC0890": "photodiode 4, theta angle", "CADC0892": "photodiode 5, theta angle",
+    "CADC0894": "photodiode 6, theta angle",
+}
+
 
 def load_table(version="current"):
     """One row per segment: features, the `anomaly` label and the `train` split flag."""

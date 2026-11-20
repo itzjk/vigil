@@ -1,7 +1,7 @@
 """Build practice/: 12 real segments (6 anomalous, 6 nominal) with the label out of sight.
 
 Reads the selection from practice_selection.json. Each case is written as a PNG and a CSV; the
-label and the reason go only into practice/answers.json. It also draws a sheet of nominal
+label and the reason go only into practice/answers.json; practice/cases.json is a label-free index. It also draws a sheet of nominal
 segments from the same channels so that whoever practises knows what "nominal" looks like.
 
 The excerpts come from OPSSAT-AD, so the pack carries the dataset's attribution and licence.
@@ -14,16 +14,10 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from opssat import ROOT, UPSTREAM_LICENSE, load_series, load_table
+from opssat import ROOT, SENSORS, UPSTREAM_LICENSE, load_series, load_table
 
 PRACTICE = ROOT / "practice"
 SELECTION = json.loads((ROOT / "practice_selection.json").read_text())
-# Names from the paper's channel list ("Data Records" section).
-SENSORS = {
-    "CADC0872": "magnetometer, axis 0", "CADC0873": "magnetometer, axis 1",
-    "CADC0874": "magnetometer, axis 2", "CADC0888": "photodiode 3, theta angle",
-    "CADC0892": "photodiode 5, theta angle", "CADC0894": "photodiode 6, theta angle",
-}
 LABELS = {1: "anomaly", 0: "nominal"}
 ATTRIBUTION = ("Data excerpted from OPSSAT-AD (Ruszczak, Kotowski, Evans and Nalepa, Scientific "
                "Data 12, 710, 2025; https://doi.org/10.5281/zenodo.15108715), CC BY 4.0 / MIT, "
@@ -100,7 +94,7 @@ def main():
         raise SystemExit("a practice case cannot also appear in the reference sheet")
 
     PRACTICE.mkdir(exist_ok=True)
-    instructions, answers = INSTRUCTIONS, []
+    instructions, answers, index = INSTRUCTIONS, [], []
     for number, case in enumerate(SELECTION["cases"], start=1):
         name, row = f"case-{number:02d}", table.loc[case["segment"]]
         seconds, values = series_of(series, case["segment"])
@@ -120,6 +114,7 @@ def main():
 
         instructions += (f"| {name} | {row.channel} | {SENSORS[row.channel]} | {len(values)} "
                          f"| {seconds[-1]:.0f} | {row.sampling} |\n")
+        index.append({"case": name, "channel": row.channel, "sampling_s": int(row.sampling)})
         answers.append({"case": name, "label": LABELS[int(row.anomaly)], "why": case["why"],
                         "opssat_segment": int(case["segment"]), "channel": row.channel})
 
@@ -139,6 +134,8 @@ def main():
     plt.close(figure)
 
     (PRACTICE / "README.md").write_text(instructions + DATA_NOTICE)
+    # Label-free index of the cases, for tools that must stay blind to the answers.
+    (PRACTICE / "cases.json").write_text(json.dumps(index, indent=2) + "\n")
     shutil.copyfile(UPSTREAM_LICENSE, PRACTICE / "LICENSE-OPSSAT-AD")
     (PRACTICE / "answers.json").write_text(json.dumps({
         "notice": "Do not open before answering. The label comes from OPSSAT-AD (ESA and KP Labs "
