@@ -15,9 +15,9 @@ from review import ledger as ledger_module
 from review.panel import DECISIONS, DISMISS_CONFIDENCE
 
 TEST_DOUBLE_BANNER = (
-    "> **Dry run with a test double.** The reviews below come from a fixed rule that exists only to\n"
-    "> exercise the circuit end to end. These numbers are **not a result** and say nothing about how\n"
-    "> a real review layer performs.\n")
+    "> **Fixed-rule reviewer: a test double.** The reviews below come from a fixed rule that exists\n"
+    "> only to check the circuit end to end. These numbers are **not a result** and say nothing\n"
+    "> about how a real review layer performs.\n")
 
 
 def load_truth(source, universe):
@@ -25,9 +25,9 @@ def load_truth(source, universe):
     if source == "test":
         anomaly = load_table().anomaly
         return {handle: int(anomaly[int(handle.split(":")[1])]) for handle in universe}
-    if source == "practice":
-        answers = json.loads((ROOT / "practice" / "answers.json").read_text())["answers"]
-        labels = {f"practice:{answer['case']}": int(answer["label"] == "anomaly") for answer in answers}
+    if source == "examples":
+        answers = json.loads((ROOT / "examples" / "answers.json").read_text())["answers"]
+        labels = {f"examples:{answer['case']}": int(answer["label"] == "anomaly") for answer in answers}
         return {handle: labels[handle] for handle in universe}
     raise ValueError(f"unknown source: {source}")
 

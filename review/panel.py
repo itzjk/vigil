@@ -47,7 +47,7 @@ def review_alarm(packet_id, packet_dir, reviewers, ledger):
     ledger.append("packet", {"packet_id": packet_id, "sha256": _fingerprint(packet_dir)})
     reviews = []
     for slot, reviewer in enumerate(reviewers, start=1):
-        with tempfile.TemporaryDirectory(prefix="alarm-guard-review-") as scratch:
+        with tempfile.TemporaryDirectory(prefix="vigil_review_") as scratch:
             private_copy = Path(scratch) / packet_id
             shutil.copytree(packet_dir, private_copy)
             outcome = reviewer.review(private_copy)
@@ -58,5 +58,5 @@ def review_alarm(packet_id, packet_dir, reviewers, ledger):
         reviews.append(outcome.review)
     decision = decide(*reviews)
     ledger.append("decision", {"packet_id": packet_id, "decision": decision,
-                               "rule": f"two-reviews/dismiss-at-{DISMISS_CONFIDENCE}"})
+                               "rule": f"two_reviews_dismiss_at_{DISMISS_CONFIDENCE}"})
     return decision

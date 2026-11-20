@@ -1,1 +1,1 @@
-"""Review layer scaffold: blind packets, pluggable reviewers, a two-review panel, a ledger and a scorer."""
+"""Review layer: blind packets, pluggable reviewers, a two-review panel, a ledger and a scorer."""

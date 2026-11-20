@@ -14,9 +14,9 @@ Checked on 2026-11-20 against Zenodo, GitHub and Scientific Data.
   (and the GitHub repository) is **MIT**, copyright 2024 KP Labs. Both allow use and redistribution with
   attribution.
 - **What this repository redistributes:** not the dataset. `download.py` fetches it and keeps the original
-  `LICENSE` next to it. The only excerpts committed here are the 22 segments of the practice pack (about
+  `LICENSE` next to it. The only excerpts committed here are the 22 example segments (about
   1% of the dataset), with attribution, a statement of changes and the upstream licence text in
-  `practice/`. `results/predictions/` holds our detectors' outputs keyed by the dataset's segment number,
+  `examples/`. `results/predictions/` holds our detectors' outputs keyed by the dataset's segment number,
   and `published.json` quotes the figures of the paper's Table 3; neither contains telemetry.
 - **Two versions of the feature table.** The first upload (DOI
   [10.5281/zenodo.12588359](https://doi.org/10.5281/zenodo.12588359), 2024-07-09) and the current one share

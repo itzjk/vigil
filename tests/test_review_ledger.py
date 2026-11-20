@@ -8,8 +8,8 @@ from review.ledger import Ledger, LedgerCorrupted, read
 
 def test_append_and_read_back(tmp_path):
     ledger = Ledger(tmp_path / "ledger.jsonl")
-    ledger.append("packet", {"packet_id": "pkt-1"})
-    ledger.append("decision", {"packet_id": "pkt-1", "decision": "escalated"})
+    ledger.append("packet", {"packet_id": "pkt_1"})
+    ledger.append("decision", {"packet_id": "pkt_1", "decision": "escalated"})
     records = read(tmp_path / "ledger.jsonl")
     assert [(x["seq"], x["kind"]) for x in records] == [(1, "packet"), (2, "decision")]
     assert records[1]["previous"] == records[0]["hash"]
@@ -18,9 +18,9 @@ def test_append_and_read_back(tmp_path):
 
 def test_reopening_appends_and_never_rewrites(tmp_path):
     path = tmp_path / "ledger.jsonl"
-    Ledger(path).append("packet", {"packet_id": "pkt-1"})
+    Ledger(path).append("packet", {"packet_id": "pkt_1"})
     before = path.read_bytes()
-    Ledger(path).append("packet", {"packet_id": "pkt-2"})
+    Ledger(path).append("packet", {"packet_id": "pkt_2"})
     after = path.read_bytes()
     assert after.startswith(before) and len(after.splitlines()) == 2
     assert [x["seq"] for x in read(path)] == [1, 2]

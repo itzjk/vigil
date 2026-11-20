@@ -1,7 +1,7 @@
 """The project's single scorer: takes predictions and returns the metrics.
 
 Usage:
-    python measure.py predictions.csv [--truth data/opssat-ad/dataset.csv] [--all]
+    python measure.py predictions.csv [--truth data/opssat_ad/dataset.csv] [--all]
 
 `predictions.csv` has the columns `segment` and `prediction` (1 = anomaly, 0 = nominal) and,
 if AUC is wanted, `score` (higher = more anomalous). By default it scores against the official
@@ -94,7 +94,7 @@ def measure_file(predictions_path, truth_path, test_only=True):
 def main():
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("predictions")
-    parser.add_argument("--truth", default="data/opssat-ad/dataset.csv")
+    parser.add_argument("--truth", default="data/opssat_ad/dataset.csv")
     parser.add_argument("--all", action="store_true",
                         help="score against every segment, not only the test split")
     options = parser.parse_args()

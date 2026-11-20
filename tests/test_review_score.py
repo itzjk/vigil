@@ -61,7 +61,7 @@ def test_whole_circuit_on_synthetic_alarms(tmp_path):
     alarms = alarm_set()
     folders = build_packets(alarms, pool(), tmp_path)
     ledger = Ledger(tmp_path / "ledger.jsonl")
-    reviewers = [RuleReviewer("fixed-rule-a", 2.0), RuleReviewer("fixed-rule-b", 3.0)]
+    reviewers = [RuleReviewer("fixed_rule_a", 2.0), RuleReviewer("fixed_rule_b", 3.0)]
     for packet_id, folder in folders.items():
         review_alarm(packet_id, folder, reviewers, ledger)
     # test:2 is the spiky one and the only real anomaly among the flagged.

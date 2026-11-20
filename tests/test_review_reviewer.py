@@ -68,13 +68,13 @@ def test_command_reviewer_happy_path(tmp_path):
 import json, os, sys
 summary = json.load(open(os.path.join(sys.argv[-1], "summary.json")))
 print(json.dumps({{"verdict": "nominal", "confidence": 0.9,
-                  "reason": "Slot " + os.environ["ALARM_GUARD_REVIEW_SLOT"] + ": max " + str(summary["max"]),
+                  "reason": "Slot " + os.environ["VIGIL_REVIEW_SLOT"] + ": max " + str(summary["max"]),
                   "next_check": "none"}}))
-""", slot=2, ALARM_GUARD_REVIEWER_VERSION="v7")
+""", slot=2, VIGIL_REVIEWER_VERSION="v7")
     outcome = reviewer.review(folder)
     assert outcome.rejection is None
     assert outcome.review["verdict"] == "nominal" and outcome.review["reason"].startswith("Slot 2: max ")
-    assert (reviewer.name, reviewer.version, reviewer.is_test_double) == ("command-2", "v7", False)
+    assert (reviewer.name, reviewer.version, reviewer.is_test_double) == ("command_2", "v7", False)
 
 
 @pytest.mark.parametrize("body, why", [
@@ -89,7 +89,7 @@ print(json.dumps({{"verdict": "nominal", "confidence": 0.9,
 ])
 def test_command_reviewer_rejects_malformed_output_as_unsure(tmp_path, body, why):
     folder = by_jump(packets(tmp_path))[0]
-    outcome = command_reviewer(tmp_path, body, ALARM_GUARD_REVIEWER_TIMEOUT="1").review(folder)
+    outcome = command_reviewer(tmp_path, body, VIGIL_REVIEWER_TIMEOUT="1").review(folder)
     assert why in outcome.rejection
     assert outcome.review["verdict"] == "unsure" and outcome.review["confidence"] == 0.0
 

@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
-DATA_DIR = ROOT / "data" / "opssat-ad"
+DATA_DIR = ROOT / "data" / "opssat_ad"
 RAW_SERIES = DATA_DIR / "segments.csv"
 UPSTREAM_LICENSE = DATA_DIR / "LICENSE"
 # Zenodo holds two versions of the feature table. The split and the labels are identical;
@@ -13,7 +13,7 @@ UPSTREAM_LICENSE = DATA_DIR / "LICENSE"
 # the first upload, which is the one the published numbers come from.
 FEATURE_TABLES = {
     "current": DATA_DIR / "dataset.csv",
-    "paper": ROOT / "data" / "opssat-ad-v1" / "dataset.csv",
+    "paper": ROOT / "data" / "opssat_ad_v1" / "dataset.csv",
 }
 
 # The 18 features and their order are those of the dataset's modeling_examples.ipynb notebook.

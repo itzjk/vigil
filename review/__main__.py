@@ -1,7 +1,7 @@
 """Run the review circuit end to end: packets -> two reviews -> decision -> ledger -> report.
 
-    python -m review --pilot              the 12 practice cases with the fixed-rule test double
-    python -m review --pilot --external   the 12 practice cases with the external reviewer
+    python -m review --examples              the 12 example segments with the fixed-rule test double
+    python -m review --examples --external   the 12 example segments with the external reviewer
     python -m review --test --external    the test-split alarms with the external reviewer
     python -m review --test --packets-only   only build the packets, review nothing
 
@@ -13,18 +13,18 @@ from datetime import datetime, timezone
 
 from opssat import ROOT
 from review.ledger import Ledger
-from review.packet import alarms_from_practice, alarms_on_test_split, build_packets
+from review.packet import alarms_from_examples, alarms_on_test_split, build_packets
 from review.panel import review_alarm
 from review.reviewer import CommandReviewer, RuleReviewer
 from review.score import report, score_run
 
-REPORTS = {"practice": ROOT / "results" / "review-pilot.md", "test": ROOT / "results" / "review.md"}
+REPORTS = {"examples": ROOT / "results" / "review_examples.md", "test": ROOT / "results" / "review.md"}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     source = parser.add_mutually_exclusive_group(required=True)
-    source.add_argument("--pilot", action="store_true", help="review the 12 practice cases")
+    source.add_argument("--examples", action="store_true", help="review the 12 example segments")
     source.add_argument("--test", action="store_true", help="review the alarms raised on the test split")
     parser.add_argument("--external", action="store_true",
                         help="use the external reviewer program instead of the fixed-rule test double")
@@ -37,13 +37,13 @@ def main():
     if not options.packets_only:
         try:
             reviewers = ([CommandReviewer(1), CommandReviewer(2)] if options.external else
-                         [RuleReviewer("fixed-rule-a", 2.0), RuleReviewer("fixed-rule-b", 3.0)])
+                         [RuleReviewer("fixed_rule_a", 2.0), RuleReviewer("fixed_rule_b", 3.0)])
         except RuntimeError as error:
             sys.exit(str(error))
 
-    alarm_set, pool = alarms_from_practice() if options.pilot else alarms_on_test_split()
+    alarm_set, pool = alarms_from_examples() if options.examples else alarms_on_test_split()
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    run_dir = ROOT / "runs" / f"{alarm_set.source}-{stamp}"
+    run_dir = ROOT / "runs" / f"{alarm_set.source}_{stamp}"
     packets = build_packets(alarm_set, pool, run_dir)
     print(f"{len(packets)} packets in {run_dir.relative_to(ROOT)}/packets")
     if options.packets_only:

@@ -8,7 +8,7 @@ A review is a JSON object with exactly four fields:
     next_check  what to look at next to confirm
 
 Two reviewers are implemented. `RuleReviewer` is a deterministic fixed rule: a TEST DOUBLE for
-exercising the circuit, not a reviewer anyone should trust. `CommandReviewer` hands the packet
+checking the circuit, not a reviewer anyone should trust. `CommandReviewer` hands the packet
 to an external program chosen through environment variables and reads the review from its
 standard output; that is the socket our own agent system plugs into.
 
@@ -26,10 +26,10 @@ from typing import Optional
 VERDICTS = ("anomaly", "nominal", "unsure")
 FIELDS = ("verdict", "confidence", "reason", "next_check")
 MAX_TEXT = 600
-COMMAND_VARIABLE = "ALARM_GUARD_REVIEWER_CMD"
-VERSION_VARIABLE = "ALARM_GUARD_REVIEWER_VERSION"
-TIMEOUT_VARIABLE = "ALARM_GUARD_REVIEWER_TIMEOUT"
-SLOT_VARIABLE = "ALARM_GUARD_REVIEW_SLOT"
+COMMAND_VARIABLE = "VIGIL_REVIEWER_CMD"
+VERSION_VARIABLE = "VIGIL_REVIEWER_VERSION"
+TIMEOUT_VARIABLE = "VIGIL_REVIEWER_TIMEOUT"
+SLOT_VARIABLE = "VIGIL_REVIEW_SLOT"
 DEFAULT_TIMEOUT_S = 600
 
 
@@ -72,12 +72,12 @@ def rejected(why):
 
 
 class RuleReviewer:
-    """TEST DOUBLE. A fixed rule on the packet summary; deterministic, for tests and dry runs."""
+    """TEST DOUBLE. A fixed rule on the packet summary; deterministic, for tests and end-to-end checks."""
 
     version = "1"
     is_test_double = True
 
-    def __init__(self, name="fixed-rule", anomaly_factor=2.0):
+    def __init__(self, name="fixed_rule", anomaly_factor=2.0):
         self.name = name
         self.anomaly_factor = anomaly_factor
 
@@ -111,8 +111,8 @@ class RuleReviewer:
 class CommandReviewer:
     """Runs an external program on the packet folder and reads one review from its stdout.
 
-    The program is taken from ALARM_GUARD_REVIEWER_CMD (split like a shell command line) and is
-    called with the packet folder as its last argument and ALARM_GUARD_REVIEW_SLOT set to the
+    The program is taken from VIGIL_REVIEWER_CMD (split like a shell command line) and is
+    called with the packet folder as its last argument and VIGIL_REVIEW_SLOT set to the
     review slot (1 or 2). It must print a single JSON object following the review schema.
     """
 
@@ -125,7 +125,7 @@ class CommandReviewer:
         self._command = shlex.split(environment[COMMAND_VARIABLE])
         self._timeout = float(environment.get(TIMEOUT_VARIABLE, DEFAULT_TIMEOUT_S))
         self._environment = {**environment, SLOT_VARIABLE: str(slot)}
-        self.name = f"command-{slot}"
+        self.name = f"command_{slot}"
         self.version = environment.get(VERSION_VARIABLE, "unversioned")
 
     def review(self, packet_dir):

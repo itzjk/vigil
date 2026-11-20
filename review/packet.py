@@ -57,7 +57,7 @@ class Alarm:
 
 @dataclass(frozen=True)
 class AlarmSet:
-    source: str                 # "test" or "practice"
+    source: str                 # "test" or "examples"
     alarms: dict                # handle -> Alarm
     flagged: dict               # detector name -> list of handles it raised
     universe: list              # every handle the detectors were run on, alarmed or not
@@ -214,7 +214,7 @@ def build_packets(alarm_set, pool, run_dir):
     key, folders = {}, {}
     for handle in handles:
         alarm = alarm_set.alarms[handle]
-        packet_id = f"pkt-{secrets.token_hex(5)}"
+        packet_id = f"pkt_{secrets.token_hex(5)}"
         sheet = sheets_dir / f"{alarm.channel}.png"
         if not sheet.exists():
             pool.draw_sheet(alarm.channel, sheet)
@@ -266,18 +266,18 @@ def alarms_on_test_split(detectors=DETECTORS):
     return AlarmSet("test", alarms, flagged, universe), _pool(table, series)
 
 
-def alarms_from_practice():
-    """The 12 practice cases, all treated as alarms, for an end-to-end dry run."""
-    practice = ROOT / "practice"
+def alarms_from_examples():
+    """The 12 example segments, all treated as alarms, to run the circuit end to end."""
+    folder = ROOT / "examples"
     alarms = {}
-    for case in json.loads((practice / "cases.json").read_text()):
-        samples = pd.read_csv(practice / f"{case['case']}.csv")
-        handle = f"practice:{case['case']}"
+    for case in json.loads((folder / "cases.json").read_text()):
+        samples = pd.read_csv(folder / f"{case['case']}.csv")
+        handle = f"examples:{case['case']}"
         alarms[handle] = Alarm(handle, case["channel"], case["sampling_s"],
                                samples.t_s.to_numpy(dtype=float), samples.value.to_numpy())
-    # The practice cases are training segments: keep them out of their own reference pool.
-    selection = json.loads((ROOT / "practice_selection.json").read_text())
+    # The examples are training segments: keep them out of their own reference pool.
+    selection = json.loads((ROOT / "examples_selection.json").read_text())
     excluded = [case["segment"] for case in selection["cases"]]
     table, series = load_table(), _series_by_segment(load_series())
-    alarm_set = AlarmSet("practice", alarms, {"all-flagged": list(alarms)}, list(alarms))
+    alarm_set = AlarmSet("examples", alarms, {"all_flagged": list(alarms)}, list(alarms))
     return alarm_set, _pool(table, series, excluded)

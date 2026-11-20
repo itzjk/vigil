@@ -1,5 +1,5 @@
 {
-  "note": "Hand-picked selection of 12 segments from the TRAINING split (the test split stays untouched for scoring the review layer). List order is case order. The label is not written here: build_practice.py reads it from the dataset. The \"why\" is our own reading of the plot, checked against the samples; OPSSAT-AD does not publish a cause per anomaly.",
+  "note": "Twelve segments chosen by hand from the TRAINING split, so the test split stays untouched. List order is case order. The label is not written here: build_examples.py reads it from the dataset. The \"why\" is our own reading of the plot, checked against the samples; OPSSAT-AD does not publish a cause per anomaly.",
   "cases": [
     {"segment": 77,   "why": "The usual smooth magnetometer arc; the small spikes are noise of at most 0.7e-5 (ten times smaller than the jumps in this channel's anomalies), there are no stretches stuck at zero and everything stays within the nominal range."},
     {"segment": 2073, "why": "Between t=185 and t=195 s two consecutive samples shoot to -5.2e-5 and +6.3e-5 (a 1.15e-4 jump, about 75 times the typical step) and the signal returns to the arc: a slowly varying magnetic field does not do that, and +6.3e-5 exceeds the maximum of every nominal segment in the channel (5.0e-5)."},

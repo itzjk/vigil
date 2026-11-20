@@ -1,61 +1,61 @@
 [
   {
-    "case": "case-01",
+    "case": "case_01",
     "channel": "CADC0872",
     "sampling_s": 1
   },
   {
-    "case": "case-02",
+    "case": "case_02",
     "channel": "CADC0872",
     "sampling_s": 5
   },
   {
-    "case": "case-03",
+    "case": "case_03",
     "channel": "CADC0888",
     "sampling_s": 5
   },
   {
-    "case": "case-04",
+    "case": "case_04",
     "channel": "CADC0892",
     "sampling_s": 1
   },
   {
-    "case": "case-05",
+    "case": "case_05",
     "channel": "CADC0873",
     "sampling_s": 1
   },
   {
-    "case": "case-06",
+    "case": "case_06",
     "channel": "CADC0872",
     "sampling_s": 1
   },
   {
-    "case": "case-07",
+    "case": "case_07",
     "channel": "CADC0894",
     "sampling_s": 1
   },
   {
-    "case": "case-08",
+    "case": "case_08",
     "channel": "CADC0872",
     "sampling_s": 1
   },
   {
-    "case": "case-09",
+    "case": "case_09",
     "channel": "CADC0888",
     "sampling_s": 5
   },
   {
-    "case": "case-10",
+    "case": "case_10",
     "channel": "CADC0873",
     "sampling_s": 5
   },
   {
-    "case": "case-11",
+    "case": "case_11",
     "channel": "CADC0894",
     "sampling_s": 1
   },
   {
-    "case": "case-12",
+    "case": "case_12",
     "channel": "CADC0892",
     "sampling_s": 1
   }
